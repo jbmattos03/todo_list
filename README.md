@@ -19,8 +19,7 @@ Uma implementação do backend de um app de To-Do List utilizando Node.js e Expr
 ## Diagrama do banco de dados
 ![](imgs/todo(2).png)
 
-Link do diagrama no dbdiagram:
-+ https://dbdiagram.io/d/todo-683e0e0261dc3bf08d36f1a8
+Você também pode acessar o [link do diagrama no dbdiagram](https://dbdiagram.io/d/todo-683e0e0261dc3bf08d36f1a8).
 
 ## Tecnologias utilizadas
 + Node.js 22.12.0
@@ -65,3 +64,9 @@ O que o script faz:
 ```bash
 npm run dev
 ```
+
+# Como testar
+## Coleção do Postman
+Você pode testar esta API rodando esta [coleção do Postman](https://jb-3144890.postman.co/workspace/JB's-Workspace~92db2518-ee27-4458-8290-11698bc12e4d/collection/45486009-9af3f929-6350-427d-9156-31cb269ae5fb?action=share&creator=45486009).
+
+
