@@ -17,7 +17,10 @@ Uma implementação do backend de um app de To-Do List utilizando Node.js e Expr
 ## Diagrama arquitetural
 
 ## Diagrama do banco de dados
-![](imgs/todo_diagram.png)
+![](imgs/todo(2).png)
+
+Link do diagrama no dbdiagram:
++ https://dbdiagram.io/d/todo-683e0e0261dc3bf08d36f1a8
 
 ## Tecnologias utilizadas
 + Node.js 22.12.0
