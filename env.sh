@@ -15,7 +15,7 @@ fi
 # Inserir variáveis de ambiente no arquivo .env
 # JWT_SECRET
 if grep -q "^JWT_SECRET=" ./.env; then
-    sed -i "s/^JWT_SECRET=.*/JWT_SECRET=$JWT_SECRET/" ./.env
+    sed -i "s#^JWT_SECRET=.*#JWT_SECRET=$JWT_SECRET#" ./.env
 else
     echo "JWT_SECRET=$JWT_SECRET" >> ./.env
 fi
@@ -37,35 +37,35 @@ fi
 
 # DB_NAME
 if grep -q "^DB_NAME=" ./.env; then
-    sed -i "s/^DB_NAME=.*/DB_NAME=$DB_NAME/" ./.env
+    sed -i "s#^DB_NAME=.*#DB_NAME=$DB_NAME#" ./.env
 else
     echo "DB_NAME=$DB_NAME" >> ./.env
 fi
 
 # DB_USER
 if grep -q "^DB_USER=" ./.env; then
-    sed -i "s/^DB_USER=.*/DB_USER=$DB_USER/" ./.env
+    sed -i "s#^DB_USER=.*#DB_USER=$DB_USER#" ./.env
 else
     echo "DB_USER=$DB_USER" >> ./.env
 fi
 
 # DB_PASSWORD
 if grep -q "^DB_PASSWORD=" ./.env; then
-    sed -i "s/^DB_PASSWORD=.*/DB_PASSWORD=$DB_PASSWORD/" ./.env
+    sed -i "s#^DB_PASSWORD=.*#DB_PASSWORD=$DB_PASSWORD#" ./.env
 else
     echo "DB_PASSWORD=$DB_PASSWORD" >> ./.env
 fi
 
 # DB_HOST
 if grep -q "^DB_HOST=" ./.env; then
-    sed -i "s/^DB_HOST=.*/DB_HOST=$DB_HOST/" ./.env
+    sed -i "s#^DB_HOST=.*#DB_HOST=$DB_HOST#" ./.env
 else
     echo "DB_HOST=$DB_HOST" >> ./.env
 fi
 
 # PORT
 if grep -q "^PORT=" ./.env; then
-    sed -i "s/^PORT=.*/PORT=$PORT/" ./.env
+    sed -i "s#^PORT=.*#PORT=$PORT#" ./.env
 else
     echo "PORT=$PORT" >> ./.env
 fi
