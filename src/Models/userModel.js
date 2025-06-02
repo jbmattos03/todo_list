@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import sequelize from "../Database/database.js";
+import { DataTypes, Model } from "sequelize";
+import { sequelize } from "../Database/database.js";
 
 class User extends Model {
     static associate(models) {
@@ -31,7 +31,7 @@ User.init({
         unique: true,
     },
     password: {
-        type: DataTypes.STRING(32),
+        type: DataTypes.STRING(72),
         allowNull: false,
     },
 }, {
