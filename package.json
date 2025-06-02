@@ -2,6 +2,7 @@
   "name": "todo_list",
   "version": "1.0.0",
   "description": "Uma implementação do backend de um app de To-Do List utilizando Node.js e Express.js.",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "dev": "node --watch --env-file=.env src/server.js"
