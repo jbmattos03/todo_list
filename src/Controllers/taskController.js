@@ -51,7 +51,7 @@ class TaskController {
 
             res.status(200).json(updatedTask);
         } catch (error) {
-            logger.error(`Error updating task: ${error.message}`);
+            logger.error(error.message);
             res.status(400).json({ error: error.message });
         }
     }
@@ -70,7 +70,7 @@ class TaskController {
 
             res.status(200).json(result);
         } catch (error) {
-            logger.error(`Error deleting task: ${error.message}`);
+            logger.error(error.message);
             res.status(400).json({ error: error.message });
         }
     }
@@ -85,12 +85,13 @@ class TaskController {
             logger.info(`Retrieving task with ID: ${taskId}`);
 
             const task = await TaskService.getTaskById(taskId);
+            const taskObj = task.toJSON();
             logger.info("Task retrieved successfully.");
-            logger.debug(`Task details: ${JSON.stringify(task)}`);
+            logger.debug(`Task details: ${JSON.stringify(taskObj)}`);
 
             res.status(200).json(task);
         } catch (error) {
-            logger.error(`Error retrieving task by ID: ${error.message}`);
+            logger.error(error.message);
             res.status(400).json({ error: error.message });
         }
     }
@@ -98,15 +99,48 @@ class TaskController {
     static async getAllTasksByUserId(req, res) {
         try {
             const userId = req.user.id; // Obtém o ID do usuário do token JWT
-            logger.info(`Retrieving all tasks for user ID: ${userId}`);
+            const { status } = req.query; // Obtém o status da query string, se fornecido
 
-            const tasks = await TaskService.getAllTasksByUserId(userId);
-            logger.info("Tasks retrieved successfully.");
-            logger.debug(`Tasks: ${JSON.stringify(tasks)}`);
+            let tasks;
+            if (status) {
+                if (isBlank(status)) {
+                    logger.warn("Status query parameter is blank.");
+                    return res.status(400).json({ error: "Status cannot be blank." });
+                }
+                logger.info(`Retrieving tasks for user ID: ${userId} with status: ${status}`);
+
+                tasks = await TaskService.filterTasks(userId, status);
+                if (!tasks || tasks.length === 0) {
+                    logger.warn("No tasks found for the user with the specified status.");
+                    return res.status(404).json({ message: "No tasks found for the specified status." });
+                }
+                else {
+                    const tasksObj = tasks.map(task => task.toJSON());
+                    logger.info("Tasks retrieved successfully with the specified status.");
+                    logger.debug(`Tasks: ${JSON.stringify(tasksObj)}`);
+                }
+            }
+            else {
+                logger.info(`Retrieving all tasks for user ID: ${userId}`);
+
+                tasks = await TaskService.getAllTasksByUserId(userId);
+                if (!tasks || tasks.length === 0) {
+                    logger.warn("No tasks found for the user.");
+                    return res.status(404).json({ message: "No tasks found." });
+                }
+                else {
+                    const tasksObj = tasks.map(task => task.toJSON());
+                    logger.info("Tasks retrieved successfully.");
+                    logger.debug(`Tasks: ${JSON.stringify(tasksObj)}`);
+                }
+            }
+                
+
+            
 
             res.status(200).json(tasks);
         } catch (error) {
-            logger.error(`Error retrieving tasks for user ID: ${error.message}`);
+            logger.error(error.message);
             res.status(400).json({ error: error.message });
         }
     }
