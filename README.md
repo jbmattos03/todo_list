@@ -18,12 +18,12 @@ Uma implementação do backend de um app de To-Do List utilizando Node.js e Expr
 
 # Arquitetura
 ## Diagrama arquitetural
-![](imgs/todo_diagram.png)
+![](imgs/architecture.png)
 
 Você também pode acessar o [link do diagrama](https://www.mermaidchart.com/app/projects/edd1f5eb-4c9e-4fb6-a3b9-a781af77d1af/diagrams/d994d12a-dc80-4573-a5b9-4ab46a11889a/version/v0.1/edit) no Mermaid Chart.
 
 ## Diagrama do banco de dados
-![](imgs/todo_diagram.png)
+![](imgs/erd.png)
 
 Você também pode acessar o [link do diagrama](https://dbdiagram.io/d/todo-683e0e0261dc3bf08d36f1a8) no dbdiagram.
 
@@ -83,6 +83,12 @@ Você pode testar esta API rodando esta [coleção do Postman](https://jb-314489
 ## Mudança de senha
 Este projeto utiliza o Ethereal, um serviço de e-mail falso para ambiente de desenvolvimento, para "enviar" um e-mail requisitando mudança de senha. 
 
-Para acessar o link de mudança de senha, fique atento para esta linha no seu terminal:
-![alt text](imgs/image.png)
+Para acessar o link de mudança de senha, primeiro, envie uma requisição POST para `/request-password-reset` com um email registrado no app.
 
+Então, fique atento para um log com "Preview URL:" no seu terminal, como por exemplo:
+![alt text](imgs/terminal.png)
+
+Esse link lhe leverá para uma página contendo o conteúdo do e-mail "enviado" pelo Ethereal:
+![alt text](imgs/ethereal.png)
+
+Por fim, copie e cole o link providenciado pelo e-mail no Postman ou em um comando cURL com uma requisição PUT contendo a sua nova senha.
