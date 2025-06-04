@@ -37,6 +37,14 @@ User.init({
         type: DataTypes.BOOLEAN,
         defaultValue: false, // Define o padrão como false
     },
+    resetToken: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    resetTokenExpiration: {
+        type: DataTypes.DATE,
+        allowNull: true, 
+    },
 }, {
     sequelize,
     modelName: "User",
