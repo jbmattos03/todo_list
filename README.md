@@ -83,12 +83,6 @@ Você pode testar esta API rodando esta [coleção do Postman](https://jb-314489
 ## Mudança de senha
 Este projeto utiliza o Ethereal, um serviço de e-mail falso para ambiente de desenvolvimento, para "enviar" um e-mail requisitando mudança de senha. 
 
-Para acessar o link de mudança de senha, primeiro, envie uma requisição POST para `/request-password-reset` com um email registrado no app.
-
-Então, fique atento para um log com "Preview URL:" no seu terminal, como por exemplo:
+Para acessar o link de mudança de senha, fique atento para esta linha no seu terminal:
 ![alt text](imgs/image.png)
 
-Esse link lhe leverá para uma página contendo o conteúdo do e-mail "enviado" pelo Ethereal:
-![alt text](imgs/image-2.png)
-
-Por fim, copie e cole o link providenciado pelo e-mail no Postman ou em um comando cURL com uma requisição PUT contendo a sua nova senha.
