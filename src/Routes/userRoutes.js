@@ -11,6 +11,8 @@ const userRoutes = (app) => {
     // Rotas públicas
     app.post("/auth/register", UserController.registerUser);
     app.post("/auth/login", UserController.loginUser);
+    app.post("/request-password-reset", UserController.requestPasswordReset);
+    app.put("/reset-password/:token", UserController.resetPassword);
 };
 
 export default userRoutes;
@@ -131,4 +133,48 @@ export default userRoutes;
  *     responses:
  *       200:
  *         description: List of all users
+ */
+/**
+ * @swagger
+ * /request-password-reset:
+ *   post:
+ *     summary: Request a password reset
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Password reset requested successfully
+ */
+/**
+ * @swagger
+ * /reset-password/{token}:
+ *   put:
+ *     summary: Reset user password
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Password reset successfully
  */
