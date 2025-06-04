@@ -21,7 +21,7 @@ class TaskController {
             res.status(201).json({ message: "Task created successfully" });
         } catch (error) {
             logger.error(error.message);
-            res.status(400).json({ error: error.message });
+            res.status(500).json({ error: error.message });
         }
     }
 
@@ -52,7 +52,11 @@ class TaskController {
             res.status(200).json(updatedTask);
         } catch (error) {
             logger.error(error.message);
-            res.status(400).json({ error: error.message });
+            if (error.message.includes("not found")) {
+                return res.status(404).json({ error: error.message });
+            } else {
+                return res.status(500).json({ error: error.message });
+            }
         }
     }
 
@@ -71,7 +75,11 @@ class TaskController {
             res.status(200).json(result);
         } catch (error) {
             logger.error(error.message);
-            res.status(400).json({ error: error.message });
+            if (error.message.includes("not found")) {
+                return res.status(404).json({ error: error.message });
+            } else {
+                return res.status(500).json({ error: error.message });
+            }
         }
     }
 
@@ -92,7 +100,11 @@ class TaskController {
             res.status(200).json(task);
         } catch (error) {
             logger.error(error.message);
-            res.status(400).json({ error: error.message });
+            if (error.message.includes("not found")) {
+                return res.status(404).json({ error: error.message });
+            } else {
+                return res.status(500).json({ error: error.message });
+            }
         }
     }
 
@@ -134,14 +146,10 @@ class TaskController {
                     logger.debug(`Tasks: ${JSON.stringify(tasksObj)}`);
                 }
             }
-                
-
-            
-
             res.status(200).json(tasks);
         } catch (error) {
             logger.error(error.message);
-            res.status(400).json({ error: error.message });
+            res.status(500).json({ error: error.message });
         }
     }
 }
