@@ -18,7 +18,7 @@ Uma implementação do backend de um app de To-Do List utilizando Node.js e Expr
 
 # Arquitetura
 ## Diagrama arquitetural
-![](image-1.png)
+![](imgs/image-1.png)
 
 Você também pode acessar o [link do diagrama](https://www.mermaidchart.com/app/projects/edd1f5eb-4c9e-4fb6-a3b9-a781af77d1af/diagrams/d994d12a-dc80-4573-a5b9-4ab46a11889a/version/v0.1/edit) no Mermaid Chart.
 
@@ -84,5 +84,5 @@ Você pode testar esta API rodando esta [coleção do Postman](https://jb-314489
 Este projeto utiliza o Ethereal, um serviço de e-mail falso para ambiente de desenvolvimento, para "enviar" um e-mail requisitando mudança de senha. 
 
 Para acessar o link de mudança de senha, fique atento para esta linha no seu terminal:
-![alt text](image.png)
+![alt text](imgs/image.png)
 
