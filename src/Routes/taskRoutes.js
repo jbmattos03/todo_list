@@ -3,11 +3,11 @@ import auth from "../Middleware/auth.js";
 
 const taskRoutes = (app) => {
     // Rotas protegidas por autenticação
-    app.get("/api/tasks/:id", auth, TaskController.getTaskById);
-    app.put("/api/tasks/update/:id", auth, TaskController.updateTask);
-    app.delete("/api/tasks/delete/:id", auth, TaskController.deleteTask);
-    app.get("/api/tasks", auth, TaskController.getAllTasksByUserId);
-    app.post("/api/tasks/create", auth, TaskController.createTask);
+    app.get("/tasks/:id", auth, TaskController.getTaskById);
+    app.put("/tasks/:id", auth, TaskController.updateTask);
+    app.delete("/tasks/:id", auth, TaskController.deleteTask);
+    app.get("/tasks", auth, TaskController.getAllTasksByUserId);
+    app.post("/tasks", auth, TaskController.createTask);
 };
 
 export default taskRoutes;
@@ -21,7 +21,7 @@ export default taskRoutes;
  */
 /**
  * @swagger
- * /api/tasks/create:
+ * /tasks:
  *   post:
  *     summary: Create a new task
  *     tags: [Tasks]
@@ -45,7 +45,7 @@ export default taskRoutes;
  */
 /**
  * @swagger
- * /api/tasks/{id}:
+ * /tasks/{id}:
  *   get:
  *     summary: Get a task by ID
  *     tags: [Tasks]
@@ -61,7 +61,7 @@ export default taskRoutes;
  */
 /**
  * @swagger
- * /api/tasks/update/{id}:
+ * /tasks/{id}:
  *   put:
  *     summary: Update a task by ID
  *     tags: [Tasks]
@@ -94,7 +94,7 @@ export default taskRoutes;
  */
 /**
  * @swagger
- * /api/tasks/delete/{id}:
+ * /tasks/{id}:
  *   delete:
  *     summary: Delete a task by ID
  *     tags: [Tasks]

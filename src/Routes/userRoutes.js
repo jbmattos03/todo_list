@@ -3,14 +3,14 @@ import auth from "../Middleware/auth.js";
 
 const userRoutes = (app) => {
     // Rotas protegidas por autenticação
-    app.get("/api/users/:id", auth, UserController.getUserById);
-    app.put("/api/users/update", auth, UserController.updateUser);
-    app.delete("/api/users/delete", auth, UserController.deleteUser);
-    app.get("/api/users", auth, UserController.getAllUsers);
+    app.get("/users/:id", auth, UserController.getUserById);
+    app.put("/users", auth, UserController.updateUser);
+    app.delete("/users", auth, UserController.deleteUser);
+    app.get("/users", auth, UserController.getAllUsers);
 
     // Rotas públicas
-    app.post("/api/users/register", UserController.registerUser);
-    app.post("/api/users/login", UserController.loginUser);
+    app.post("/auth/register", UserController.registerUser);
+    app.post("/auth/login", UserController.loginUser);
 };
 
 export default userRoutes;
@@ -24,7 +24,7 @@ export default userRoutes;
  */
 /**
  * @swagger
- * /api/users/register:
+ * /auth/register:
  *   post:
  *     summary: Register a new user
  *     tags: [Users]
@@ -47,7 +47,7 @@ export default userRoutes;
  */
 /**
  * @swagger
- * /api/users/login:
+ * /auth/login:
  *   post:
  *     summary: Login a user
  *     tags: [Users]
@@ -68,7 +68,7 @@ export default userRoutes;
  */
 /**
  * @swagger
- * /api/users/{id}:
+ * /users/{id}:
  *   get:
  *     summary: Get user by ID
  *     tags: [Users]
@@ -84,7 +84,7 @@ export default userRoutes;
  */
 /**
  * @swagger
- * /api/users/update:
+ * /users:
  *   put:
  *     summary: Update user information
  *     tags: [Users]
@@ -105,7 +105,7 @@ export default userRoutes;
  */
 /**
  * @swagger
- * /api/users/delete:
+ * /users:
  *   delete:
  *     summary: Delete a user
  *     tags: [Users]
@@ -124,7 +124,7 @@ export default userRoutes;
  */
 /**
  * @swagger
- * /api/users:
+ * /users:
  *   get:
  *     summary: Get all users
  *     tags: [Users]
