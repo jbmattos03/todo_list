@@ -91,18 +91,9 @@ class TaskService {
 
             const tasks = await Task.findAll({
                 where: { userId },
-                include: [{ model: User, as: "user" }] // Incluir informações do usuário com join
             });
 
-            // Transformar os resultados em objetos simples
-            const tasksObj = tasks.map(task => {
-                const taskObj = task.toJSON();
-                delete taskObj.user; // Remover a referência ao usuário para evitar duplicação de dados
-
-                return taskObj;
-            });
-
-            return tasksObj;
+            return tasks;
         } catch (error) {
             throw new Error("Error retrieving tasks: " + error.message);
         }
