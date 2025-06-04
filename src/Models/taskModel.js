@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import sequelize from "../Database/database.js";
+import { sequelize } from "../Database/database.js";
 import User from "./userModel.js";
 
 class Task extends Model {
@@ -34,6 +34,10 @@ Task.init({
         type: DataTypes.ENUM("pending", "completed"),
         defaultValue: "pending",
     },
+    expirationDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
     userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -48,5 +52,9 @@ Task.init({
     tableName: "tasks",
     timestamps: true, // Adiciona createdAt e updatedAt
 });
+
+// Registrar associações entre User e Task
+User.associate({ Task });
+Task.associate({ User });
 
 export default Task;
