@@ -6,7 +6,7 @@ class TaskController {
             const { title, description, expirationDate } = req.body;
             const userId = req.user.id; // Obtém o ID do usuário do token JWT
 
-            const task = await TaskService.createTask(title, description, expirationDate, userId);
+            await TaskService.createTask(title, description, expirationDate, userId);
 
             res.status(201).json({ message: "Task created successfully" });
         } catch (error) {
