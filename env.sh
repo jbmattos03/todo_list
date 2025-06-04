@@ -69,3 +69,14 @@ if grep -q "^PORT=" ./.env; then
 else
     echo "PORT=$PORT" >> ./.env
 fi
+
+# Ask the user for their preferred log level
+echo "Please enter your preferred log level (e.g., debug, info, warn, error):"
+read LOG_LEVEL
+
+# LOG_LEVEL
+if grep -q "^LOG_LEVEL=" ./.env; then
+    sed -i "s#^LOG_LEVEL=.*#LOG_LEVEL=$LOG_LEVEL#" ./.env
+else
+    echo "LOG_LEVEL=$LOG_LEVEL" >> ./.env
+fi
