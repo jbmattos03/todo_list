@@ -227,7 +227,7 @@ class UserController {
 
             const info = await transporter.sendMail(mailOptions);
             logger.info("Password reset email sent successfully.");
-            logger.debug(`Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+            logger.info(`Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
 
             return res.status(200).json({ message: "Password reset email sent" });
         } catch (error) {
