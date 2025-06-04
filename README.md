@@ -15,6 +15,12 @@ Uma implementação do backend de um app de To-Do List utilizando Node.js e Expr
 3. [Como Testar](#como-testar)
     - 3.1 [Endpoint do Swagger](#endpoint-do-swagger)
     - 3.2 [Coleção do Postman](#coleção-do-postman)
+4. [Decisões Técnicas](#decisões-técnicas)
+    - 4.1 [Arquitetura](#arquitetura-1)
+    - 4.2 [Autenticação e segurança](#autenticação-e-segurança)
+    - 4.3 [Logs](#logs)
+    - 4.4 [Banco de dados](#banco-de-dados)
+5. [Melhorias Futuras](#melhorias-futuras)
 
 # Arquitetura
 ## Diagrama arquitetural
@@ -31,6 +37,8 @@ Você também pode acessar o [link do diagrama](https://dbdiagram.io/d/todo-683e
 + Node.js 22.12.0
 + npm 10.9.0
 + Express.js 5.1.0
+
+Escolhi Node/Express com JS puro por uma questão de familiaridade, pois não tenho muito domínio sobre o Typescript ou o NestJS.
 
 # Como Rodar
 ## 1. Instalando dependências
@@ -73,7 +81,7 @@ O que o script faz:
 npm run dev
 ```
 
-# Como testar
+# Como Testar
 ## Endpoint do Swagger
 Este projeto usa o Swagger para documentação da API. A rota da documentação é `/api-docs`.
 
@@ -92,3 +100,24 @@ Esse link lhe leverá para uma página contendo o conteúdo do e-mail "enviado" 
 ![alt text](imgs/ethereal.png)
 
 Por fim, copie e cole o link providenciado pelo e-mail no Postman ou em um comando cURL com uma requisição PUT contendo a sua nova senha.
+
+# Decisões Técnicas
+## Arquitetura
+Escolhi a arquitetura MVCS (Model, View, Controller, Service) para organizar o projeto, pois, dessa forma, é possível separar o código em áreas com responsabilidades bem definidas:
++ Model: Responsável por lidar com a lógica relacionada ao banco de dados, como schema e ORM (usando Sequelize)
++ Controller/View: Responsável por lidar com requisições HTTP, validar e sanitizar o input do usuário, além de sanitizar e retornar a resposta apropriada
++ Service: Responsável pelas regras de negócio e por mediar operações entre Controllers e Models
+
+## Autenticação e segurança
+Utilizei JWT para autenticação, atribuindo a lógica responsável por verificar se um usuário está autorizado para acessar uma rota protegida a um middleware de autenticação. Além disso, por uma questão de segurança, implementei hashing das senhas armazenadas no banco de dados.
+
+## Logs
+Decidi implementar logging estruturado utilizando Pino neste projeto, porque logs estruturados facilitam o processo de debug e de compreensão do código. 
+
+## Banco de dados
+Por uma questão de familiaridade, escolhi o MySQL como o SGBD deste projeto. O design do banco foi muito simples, com apenas duas tabelas com uma relação many-to-one entre User e Task. Além disso, implementei _soft delete_, ao invés de _hard delete_ neste projeto com o propósito de praticar, pois nunca tinha o feito antes.
+
+# Melhorias Futuras
+Se tivesse mais tempo, implementaria testes unitários utilizando um framework de testes como o Jest. Além disso, também usaria um middleware como o express-validator para uma validação de input mais robusta.
+
+Por fim, se tivesse mais tempo, aprenderia mais sobre Typescript para poder usá-lo neste projeto, devido à possibilidade de usar tipagem estática para reforçar validações de input de usuário, além de containerizar o projeto com Docker. 
