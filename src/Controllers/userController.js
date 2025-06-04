@@ -1,6 +1,8 @@
 import UserService from "../Services/userService.js";
 import logger from "../logger.js";
 import { isValidEmail, isEmpty } from "../Utils/validation.js";
+import nodemailer from "nodemailer";
+import bcrypt from "bcrypt";
 
 class UserController {
     static async registerUser(req, res) {
@@ -79,7 +81,11 @@ class UserController {
             res.status(200).json({ message: "User updated successfully", userObj }); 
         } catch (error) {
             logger.error(error.message);
-            res.status(400).json({ error: error.message });
+            if (error.message.includes("not found")) {
+                return res.status(404).json({ error: error.message });
+            } else {
+                return res.status(500).json({ error: error.message });
+            }
         }
     }
 
@@ -95,7 +101,7 @@ class UserController {
             res.status(200).json(result);
         } catch (error) {
             logger.error(error.message);
-            res.status(400).json({ error: error.message });
+            res.status(404).json({ error: error.message });
         }
     }
 
@@ -120,7 +126,7 @@ class UserController {
             res.status(200).json(userObj);
         } catch (error) {
             logger.error(error.message);
-            res.status(400).json({ error: error.message });
+            res.status(404).json({ error: error.message });
         }
     }
 
@@ -142,7 +148,7 @@ class UserController {
             res.status(200).json(usersObj);
         } catch (error) {
             logger.error(error.message);
-            res.status(400).json({ error: error.message });
+            res.status(404).json({ error: error.message });
         }
     }
 
@@ -167,7 +173,95 @@ class UserController {
             res.status(200).json(userObj);
         } catch (error) {
             logger.error(error.message);
-            res.status(400).json({ error: error.message });
+            res.status(404).json({ error: error.message });
+        }
+    }
+
+    static async requestPasswordReset(req, res) {
+        const { email } = req.body;
+        if (isEmpty(email) || !isValidEmail(email)) {
+            logger.warn("Password reset request with invalid or missing email.");
+            return res.status(400).json({ error: "Valid email is required." });
+        }
+        logger.info(`Password reset request for email: ${email}`);
+
+        try {
+            const user = await UserService.getUserByEmail(email);
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            logger.info(`User found for password reset: ${user.email}`);
+            const id = user.id;
+
+            // Gerar token de redefinição de senha e armazenar no banco de dados
+            const updatedUser = await UserService.generateResetToken(id);
+            logger.info(`Password reset token generated for user ID: ${id}`);
+            logger.debug(`User reset token: ${user.resetToken}`);
+            //logger.debug(`User reset token expiration: ${user.resetTokenExpiration}`);
+
+            // Criar conta de teste
+            const testAccount = await nodemailer.createTestAccount();
+            logger.info("Test email account created for sending password reset email.");
+
+            // Enviar email de redefinição de senha
+            const transporter = nodemailer.createTransport({
+                host: "smtp.ethereal.email",
+                port: 587,
+                auth: {
+                    user: testAccount.user,
+                    pass: testAccount.pass,
+                },
+            });
+
+            const mailOptions = {
+                from: process.env.EMAIL_USER,
+                to: user.email,
+                subject: "Password Reset",
+                text: `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n
+                Please click on the following link, or paste this into your browser to complete the process:\n\n
+                http://localhost:${process.env.PORT}/reset-password/${encodeURIComponent(updatedUser.resetToken)}\n\n
+                If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+            };
+
+            logger.info(`Sending password reset email to: ${user.email}`);
+
+            const info = await transporter.sendMail(mailOptions);
+            logger.info("Password reset email sent successfully.");
+            logger.debug(`Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
+
+            return res.status(200).json({ message: "Password reset email sent" });
+        } catch (error) {
+            logger.error(`Error sending password reset email: ${error.message}`);
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
+    static async resetPassword(req, res) {
+        const { token } = req.params;
+        logger.debug(`Password reset token received: ${token}`);
+        const { password } = req.body;
+        if (isEmpty(token) || isEmpty(password)) {
+            logger.warn("Password reset attempt with missing or empty token or password.");
+            return res.status(400).json({ message: "Token and password are required" });
+        }
+
+        logger.info("Password reset attempt received");
+
+        try {
+            const user = await UserService.getUserByResetToken(token);
+            if (!user || user.resetTokenExpiration < Date.now()) {
+                logger.warn("Invalid or expired token provided for password reset.");
+                return res.status(401).json({ message: "Invalid or expired token" });
+            }
+            logger.debug(`User found for password reset: ${user ? user.id : "No user found"}`);
+
+            await UserService.updatePassword(user.id, password);
+            logger.info("Password updated successfully");
+
+            return res.status(200).json({ message: "Password has been reset" });
+        } catch (error) {
+            logger.error(`Error resetting password: ${error.message}`);
+            return res.status(500).json({ message: "Error resetting password" });
         }
     }
 }

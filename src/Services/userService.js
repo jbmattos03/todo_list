@@ -1,6 +1,8 @@
 import User from "../Models/userModel.js";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
 import bcrypt from "bcrypt";
+import { Op } from "sequelize";
 
 class UserService {
     static async registerUser(name, email, password) {
@@ -151,6 +153,77 @@ class UserService {
             throw new Error("Error retrieving users: " + error.message);
         }
     }
+
+    static async getUserByResetToken(token) {
+        try {
+            const currentTime = Date.now();
+            const user = await User.findOne({
+                where: {
+                    resetToken: token,
+                    isDeleted: false,
+                }
+            });
+
+            return user;
+        } catch (error) {
+            throw new Error("Error retrieving user by reset token: " + error.message);
+        }
+    }
+
+    static async updatePassword(userId, password) {
+        try {
+            const user = await User.findOne({ where: { id: userId, isDeleted: false} });
+            if (!user) {
+                throw new Error("User not found");
+            }
+
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const isSamePassword = await bcrypt.compare(password, user.password);
+            if (isSamePassword) {
+                throw new Error("New password cannot be the same as the old password.");
+            }
+
+            const updatedData = {
+                password: hashedPassword,
+                resetToken: null,
+                resetTokenExpiration: null,
+            }
+            
+            await User.update(updatedData, { where: { id: userId } });
+        } catch (error) {
+            throw new Error("Error updating password: " + error.message);
+        }
+    }
+
+    static async generateResetToken(userId) {
+        try {
+            // Verificar se o usuário existe
+            const user = await User.findOne({ where: { id: userId, isDeleted: false } });
+            if (!user) {
+                throw new Error("User not found.");
+            }
+
+            // Gerar token e definir expiração
+            const token = bcrypt.genSaltSync(10)
+            const expiry = Date.now() + 3600000; // 1 hora de expiração
+
+            // Salvar token e expiração no banco de dados
+            await User.update(
+                { resetToken: token, resetTokenExpiration: expiry },
+                { where: { id: userId } }
+            );
+
+            const updatedUser = await User.findByPk(userId);
+
+            console.log("Generated reset token:", token);
+            console.log("User token", updatedUser.resetToken);
+
+            return updatedUser;
+        }
+        catch (error) {
+            throw new Error("Error generating password reset token: " + error.message);
+        }
+    }  
 }
 
 export default UserService;
