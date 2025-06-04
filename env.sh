@@ -7,6 +7,7 @@ DB_PASSWORD=$(openssl rand -base64 16)
 DB_HOST="localhost"
 PORT="8081"
 
+
 # Checar se o arquivo .env existe
 if ! [ -e ".env" ]; then
     touch ./.env
@@ -70,7 +71,7 @@ else
     echo "PORT=$PORT" >> ./.env
 fi
 
-# Ask the user for their preferred log level
+# Perguntar ao usuário o nível de log desejado
 echo "Please enter your preferred log level (e.g., debug, info, warn, error):"
 read LOG_LEVEL
 
@@ -80,3 +81,6 @@ if grep -q "^LOG_LEVEL=" ./.env; then
 else
     echo "LOG_LEVEL=$LOG_LEVEL" >> ./.env
 fi
+
+# Informar ao usuário que o arquivo .env foi criado ou atualizado
+echo ".env file has been created or updated with the necessary environment variables."
