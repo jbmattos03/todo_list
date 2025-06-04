@@ -46,6 +46,10 @@ Task.init({
             key: "id",
         },
     },
+    isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false, // Define o padrão como false
+    },
 }, {
     sequelize,
     modelName: "Task",

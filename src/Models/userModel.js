@@ -28,11 +28,14 @@ User.init({
     email: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
     },
     password: {
         type: DataTypes.STRING(72),
         allowNull: false,
+    },
+    isDeleted: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false, // Define o padrão como false
     },
 }, {
     sequelize,
