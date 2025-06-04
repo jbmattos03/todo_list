@@ -91,6 +91,25 @@ class TaskService {
             throw new Error("Error retrieving tasks: " + error.message);
         }
     }
+
+    static async filterTasks(userId, status) {
+        try {
+            // Verificar se usuário existe
+            await UserService.getUserById(userId);
+
+            const tasks = await Task.findAll({
+                where: { 
+                    userId,
+                    isDeleted: false, // Garantir que não sejam retornadas tarefas excluídas
+                    status: status
+                },
+            });
+
+            return tasks;
+        } catch (error) {
+            throw new Error("Error retrieving filtered tasks: " + error.message);
+        }
+    }
 }
 
 export default TaskService;
