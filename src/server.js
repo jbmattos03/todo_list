@@ -1,7 +1,7 @@
 import express from "express";
-import userRoutes from "./routes/userRoutes.js";
-import taskRoutes from "./routes/taskRoutes.js";
-import { sequelize, initializeSequelize } from "Database/database.js"
+import userRoutes from "./Routes/userRoutes.js";
+import taskRoutes from "./Routes/taskRoutes.js";
+import { sequelize, initializeDatabase } from "./Database/database.js"
 
 // Criando servidor Express
 const app = express();
@@ -12,7 +12,7 @@ userRoutes(app);
 taskRoutes(app);
 
 // Inicializando database com Sequelize
-initializeSequelize().then(() => {
+initializeDatabase().then(() => {
     sequelize.sync().then(
         () => {
             console.log("Synchronization with the database completed successfully.");
