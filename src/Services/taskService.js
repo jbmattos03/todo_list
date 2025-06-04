@@ -19,9 +19,6 @@ class TaskService {
             if (userId) {
                 data.userId = userId;
             }
-            if (!title || !userId) {
-                throw new Error("Missing required fields: title or userId.");
-            }
 
             // Verificar se o usuário existe
             await UserService.getUserById(userId);

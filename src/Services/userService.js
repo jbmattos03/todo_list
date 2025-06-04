@@ -11,11 +11,6 @@ class UserService {
                 throw new Error("User already exists with this email.");
             }
 
-            // Verificar se os campos obrigatórios estão preenchidos
-            if (!name || !email || !password) {
-                throw new Error("Name, email, and password are required.");
-            }
-
             // Criar hash da senha
             const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -51,9 +46,6 @@ class UserService {
                 }
 
                 data.email = email;
-            } 
-            if (!name && !email) {
-                throw new Error("Missing required fields: name and email.");
             }
 
             // Atualizar usuário
