@@ -4,7 +4,6 @@ import taskRoutes from "./Routes/taskRoutes.js";
 import { sequelize, initializeDatabase } from "./Database/database.js"
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
-import logger from "./logger.js";
 
 // Criando servidor Express
 const app = express();
@@ -40,16 +39,16 @@ taskRoutes(app);
 initializeDatabase().then(() => {
     sequelize.sync().then(
         () => {
-            logger.info("Synchronization with the database completed successfully.");
+            console.log("Synchronization with the database completed successfully.");
 
             // Inicializando o servidor após a conexão com o banco de dados
             app.listen(process.env.PORT || 8000, () => {
-                logger.info(`Server running on port ${process.env.PORT || 8000}`);
+                console.log(`Server running on port ${process.env.PORT || 8000}`);
             });
         }
     ).catch((error) => {
-        logger.error(`Unable to sync with the database: ${error.message}`, { error });
+        console.error("Unable to sync with the database:", error);
     });
 }).catch((error) => {
-    logger.error(`Unable to connect to the database: ${error.message}`, { error });
+        console.error("Unable to connect with the database:", error);
 });
