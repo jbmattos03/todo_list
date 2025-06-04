@@ -18,7 +18,7 @@ Uma implementação do backend de um app de To-Do List utilizando Node.js e Expr
 
 # Arquitetura
 ## Diagrama arquitetural
-![](imgs/image-1.png)
+![](imgs/todo_diagram.png)
 
 Você também pode acessar o [link do diagrama](https://www.mermaidchart.com/app/projects/edd1f5eb-4c9e-4fb6-a3b9-a781af77d1af/diagrams/d994d12a-dc80-4573-a5b9-4ab46a11889a/version/v0.1/edit) no Mermaid Chart.
 
