@@ -13,7 +13,8 @@ Uma implementação do backend de um app de To-Do List utilizando Node.js e Expr
         - 2.2.2 [Rodando env.sh](#22-rodando-envsh)
     - [3. Rodando servidor](#3-rodando-servidor)
 3. [Como Testar](#como-testar)
-    - 3.1 [](#)
+    - 3.1 [Endpoint do Swagger](#endpoint-do-swagger)
+    - 3.2 [Coleção do Postman](#coleção-do-postman)
 
 # Arquitetura
 ## Diagrama arquitetural
@@ -61,6 +62,8 @@ O que o script faz:
 7. Preenche `DB_PASSWORD` com o comando `openssl rand -base64 16`
 8. Preenche `DB_HOST` com "localhost"
 9. Preenche `PORT` com 8081
+10. Solicita o nível de log do usuário (debug, info, error, etc.)
+11. Preenche `LOG_LEVEL` com o nível de log
 
 ## 3. Rodando servidor
 ```bash
