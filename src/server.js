@@ -2,10 +2,34 @@ import express from "express";
 import userRoutes from "./Routes/userRoutes.js";
 import taskRoutes from "./Routes/taskRoutes.js";
 import { sequelize, initializeDatabase } from "./Database/database.js"
+import swaggerJSDoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
 
 // Criando servidor Express
 const app = express();
 app.use(express.json()); // Especificando que o servidor irá receber JSON
+
+// Configurando o Swagger
+const swaggerOptions = {
+    definition: {
+        openapi: "3.0.0",
+        info: {
+            title: "To-Do List API",
+            version: "1.0.0",
+            description: "API for managing tasks and users in a task management application."
+        },
+        servers: [
+            {
+                url: `http://localhost:${process.env.PORT || 8000}`
+            }
+        ]
+    },
+    apis: ["src/Routes/*.js"]
+};
+
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));
 
 // Importando rotas
 userRoutes(app);
