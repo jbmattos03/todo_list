@@ -7,11 +7,13 @@ Uma implementação do backend de um app de To-Do List utilizando Node.js e Expr
     - 1.2 [Diagrama do banco de dados](#diagrama-do-banco-de-dados)
     - 1.3 [Tecnologias utilizadas](#tecnologias-utilizadas)
 2. [Como Rodar](#como-rodar)
-    - [1. Instalando dependências](#1-instalando-dependências)
-    - [2. Variáveis de ambiente](#2-variáveis-de-ambiente)
-        - [2.1 Criação manual](#21-criação-manual)
-        - [2.2 Rodando env.sh](#22-rodando-envsh)
+    - 2.1 [Instalando dependências](#1-instalando-dependências)
+    - 2.2 [Variáveis de ambiente](#2-variáveis-de-ambiente)
+        - 2.2.1 [Criação manual](#21-criação-manual)
+        - 2.2.2 [Rodando env.sh](#22-rodando-envsh)
     - [3. Rodando servidor](#3-rodando-servidor)
+3. [Como Testar](#como-testar)
+    - 3.1 [](#)
 
 # Arquitetura
 ## Diagrama arquitetural
@@ -66,6 +68,9 @@ npm run dev
 ```
 
 # Como testar
+## Endpoint do Swagger
+Este projeto usa o Swagger para documentação da API. A rota da documentação é `/api-docs`.
+
 ## Coleção do Postman
 Você pode testar esta API rodando esta [coleção do Postman](https://jb-3144890.postman.co/workspace/JB's-Workspace~92db2518-ee27-4458-8290-11698bc12e4d/collection/45486009-9af3f929-6350-427d-9156-31cb269ae5fb?action=share&creator=45486009).
 
