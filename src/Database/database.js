@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import mysql2 from "mysql2/promise";
+import logger from "../logger.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -13,11 +14,11 @@ async function createDatabase() {
 
         await connection.query(`CREATE DATABASE IF NOT EXISTS \`${process.env.DB_NAME}\`;`);
 
-        console.log(`Database ${process.env.DB_NAME} created or already exists.`);
+        logger.info(`Database ${process.env.DB_NAME} created or already exists.`);
 
         await connection.end();
     } catch (error) {
-        console.error("Unable to create database:", error);
+        logger.error(`Unable to create database: ${error.message}`, { error });
     }
 }
 
@@ -30,16 +31,16 @@ const sequelize = new Sequelize(
         dialect: "mysql",
         timezone: "-03:00",
     }
-)
+);
 
 async function initializeDatabase() {
     try {
         await createDatabase();
         await sequelize.authenticate();
 
-        console.log("Database connection has been established successfully.");
+        logger.info("Database connection has been established successfully.");
     } catch (error) {
-        console.error("Unable to connect to the database:", error);
+        logger.error(`Unable to connect to the database: ${error.message}`, { error });
     }
 }
 
