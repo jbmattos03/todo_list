@@ -1,5 +1,4 @@
 import Task from "../Models/taskModel.js"
-import User from "../Models/userModel.js";
 import UserService from "../Services/userService.js";
 
 class TaskService {
@@ -20,12 +19,12 @@ class TaskService {
             if (userId) {
                 data.userId = userId;
             }
+            if (!title || !userId) {
+                throw new Error("Missing required fields: title or userId.");
+            }
 
             // Verificar se o usuário existe
-            const user = await UserService.getUserById(userId);
-            if (!user) {
-                throw new Error("User not found.");
-            }
+            await UserService.getUserById(userId);
             
             const task = await Task.create(data);
 
@@ -38,7 +37,7 @@ class TaskService {
     static async updateTask(taskId, updateData) {
         try {
             const task = await Task.findByPk(taskId);
-            if (!task) {
+            if (!task || task.isDeleted) {
                 throw new Error("Task not found.");
             }
 
@@ -55,12 +54,9 @@ class TaskService {
 
     static async deleteTask(taskId) {
         try {
-            const task = await Task.findByPk(taskId);
-            if (!task) {
-                throw new Error("Task not found.");
-            }
+            const task = await TaskService.getTaskById(taskId);
 
-            await task.destroy();
+            await task.update({ isDeleted: true });
 
             return { message: "Task deleted successfully." };
         } catch (error) {
@@ -71,7 +67,7 @@ class TaskService {
     static async getTaskById(taskId) {
         try {
             const task = await Task.findByPk(taskId);
-            if (!task) {
+            if (!task || task.isDeleted) {
                 throw new Error("Task not found.");
             }
 
@@ -85,12 +81,12 @@ class TaskService {
         try {
             // Verificar se usuário existe
             const user = await UserService.getUserById(userId);
-            if (!user) {
-                throw new Error("User not found.");
-            }
 
             const tasks = await Task.findAll({
-                where: { userId },
+                where: { 
+                    userId,
+                    isDeleted: false // Garantir que não sejam retornadas tarefas excluídas 
+                },
             });
 
             return tasks;

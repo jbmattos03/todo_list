@@ -6,20 +6,14 @@ class UserService {
     static async registerUser(name, email, password) {
         try {
             // Verificar se o usuário já existe
-            const existingUser = await User.findOne({ where: { email } });
-            if (existingUser) {
+            const existingUser = await User.findOne({ where: { email, isDeleted: false } });
+            if (existingUser && !existingUser.isDeleted) {
                 throw new Error("User already exists with this email.");
             }
 
             // Verificar se os campos obrigatórios estão preenchidos
             if (!name || !email || !password) {
                 throw new Error("Name, email, and password are required.");
-            }
-
-            // Verificar se email fornecido já está em uso
-            const userWithEmail = await User.findOne({ where: { email } });
-            if (userWithEmail) {
-                throw new Error("Email is already in use by another user.");
             }
 
             // Criar hash da senha
@@ -38,8 +32,8 @@ class UserService {
     static async updateUser(name, email, userId) {
         try {
             // Verificar se o usuário existe
-            const existingUser = await UserService.getUserById(userId);
-            if (!existingUser) {
+            const existingUser = await User.findByPk(userId);
+            if (!existingUser || existingUser.isDeleted) {
                 throw new Error("User not found.");
             }
 
@@ -49,21 +43,21 @@ class UserService {
             if (name) {
                 data.name = name;
             } 
-            else if (email) {
+            if (email) {
                 // Verificar se o email já está em uso por outro usuário
-                const userWithEmail = await User.findOne({ where: { email } });
+                const userWithEmail = await User.findOne({ where: { email, isDeleted: false } });
                 if (userWithEmail && (userWithEmail.id !== userId)) {
                     throw new Error("Email is already in use by another user.");
                 }
 
                 data.email = email;
             } 
-            else {
-                throw new Error("At least one field (name or email) must be provided for update.");
+            if (!name && !email) {
+                throw new Error("Missing required fields: name and email.");
             }
 
             // Atualizar usuário
-            await User.update(data, { where: { id: userId} });
+            await existingUser.update(data);
             const updatedUser = await User.findByPk(userId);
 
             return updatedUser;
@@ -74,10 +68,14 @@ class UserService {
 
     static async loginUser(email, password) {
         try {
+            // Inicializar flags
+            var userFlag = false;
+            var passwordFlag = false;
+
             // Verificar se usuário existe
-            const existingUser = await User.findOne({ where: { email } });
+            const existingUser = await User.findOne({ where: { email, isDeleted: false } });
             if (!existingUser) {
-                throw new Error("User has not been registered.");
+                userFlag = true;
             }
 
             // Verificar senha
@@ -94,7 +92,11 @@ class UserService {
 
                 return token;
             } else {
-                throw new Error("Invalid password.");
+                passwordFlag = true;
+            }
+
+            if (userFlag || passwordFlag) {
+                throw new Error("Invalid email or password.");
             }
         } catch (error) {
             throw new Error("Error logging in user: " + error.message);
@@ -104,15 +106,14 @@ class UserService {
     static async deleteUser(userId) {
         try {
             // Verificar se usuário existe
-            const existingUser = await UserService.getUserById(userId);
-
-            if (!existingUser) {
+            const existingUser = await User.findByPk(userId);
+            if (!existingUser || existingUser.isDeleted) {
                 throw new Error("User not found.");
             }
 
-            // Excluir usuário: Hard delete
-            // TODO: Implementar soft delete
-            await User.destroy({ where: { id: userId } });
+            // Excluir usuário: soft delete
+            await existingUser.update({ isDeleted: true });
+            // Hard delete: cawait User.destroy({ where: { id: userId } });
 
             return { message: "User deleted successfully." };
         } catch (error) {
@@ -123,10 +124,10 @@ class UserService {
     static async getUserById(userId) {
         try {
             const user = await User.findByPk(userId);
-            if (!user) {
+            if (!user || user.isDeleted) {
                 throw new Error("User not found.");
             }
-
+    
             return user;
         } catch (error) {
             throw new Error("Error retrieving user: " + error.message);
@@ -135,7 +136,7 @@ class UserService {
 
     static async getUserByEmail(email) {
         try {
-            const user = await User.findOne({ where: { email } });
+            const user = await User.findOne({ where: { email, isDeleted: false } });
             if (!user) {
                 throw new Error("User not found.");
             }
@@ -148,7 +149,11 @@ class UserService {
 
     static async getAllUsers() {
         try {
-            const users = await User.findAll();
+            const users = await User.findAll({ where: { isDeleted: false } });
+            if (!users || users.length === 0) {
+                throw new Error("No users found.");
+            }
+
             return users;
         } catch (error) {
             throw new Error("Error retrieving users: " + error.message);
