@@ -11,18 +11,21 @@ Uma implementação do backend de um app de To-Do List utilizando Node.js e Expr
     - 2.2 [Variáveis de ambiente](#2-variáveis-de-ambiente)
         - 2.2.1 [Criação manual](#21-criação-manual)
         - 2.2.2 [Rodando env.sh](#22-rodando-envsh)
-    - [3. Rodando servidor](#3-rodando-servidor)
+    - 2.3 [Rodando servidor](#3-rodando-servidor)
 3. [Como Testar](#como-testar)
     - 3.1 [Endpoint do Swagger](#endpoint-do-swagger)
     - 3.2 [Coleção do Postman](#coleção-do-postman)
 
 # Arquitetura
 ## Diagrama arquitetural
+![](image-1.png)
+
+Você também pode acessar o [link do diagrama](https://www.mermaidchart.com/app/projects/edd1f5eb-4c9e-4fb6-a3b9-a781af77d1af/diagrams/d994d12a-dc80-4573-a5b9-4ab46a11889a/version/v0.1/edit) no Mermaid Chart.
 
 ## Diagrama do banco de dados
-![](imgs/todo(2).png)
+![](imgs/todo_diagram.png)
 
-Você também pode acessar o [link do diagrama no dbdiagram](https://dbdiagram.io/d/todo-683e0e0261dc3bf08d36f1a8).
+Você também pode acessar o [link do diagrama](https://dbdiagram.io/d/todo-683e0e0261dc3bf08d36f1a8) no dbdiagram.
 
 ## Tecnologias utilizadas
 + Node.js 22.12.0
@@ -77,4 +80,9 @@ Este projeto usa o Swagger para documentação da API. A rota da documentação 
 ## Coleção do Postman
 Você pode testar esta API rodando esta [coleção do Postman](https://jb-3144890.postman.co/workspace/JB's-Workspace~92db2518-ee27-4458-8290-11698bc12e4d/collection/45486009-9af3f929-6350-427d-9156-31cb269ae5fb?action=share&creator=45486009).
 
+## Mudança de senha
+Este projeto utiliza o Ethereal, um serviço de e-mail falso para ambiente de desenvolvimento, para "enviar" um e-mail requisitando mudança de senha. 
+
+Para acessar o link de mudança de senha, fique atento para esta linha no seu terminal:
+![alt text](image.png)
 
